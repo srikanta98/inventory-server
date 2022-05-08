@@ -77,32 +77,9 @@ async function run() {
         
         // Order Collection API
 
-        app.get('/order', verifyJWT, async (req, res) => {
-            const decodedEmail = req.decoded.email;
-            const email = req.query.email;
-            if (email === decodedEmail) {
-                const query = { email: email };
-                const cursor = orderCollection.find(query);
-                const orders = await cursor.toArray();
-                res.send(orders);
-            }
-            else{
-                res.status(403).send({message: 'forbidden access'})
-            }
-        })
+        
 
-        app.post('/order', async (req, res) => {
-            const order = req.body;
-            const result = await orderCollection.insertOne(order);
-            res.send(result);
-        })
-
-        app.delete('/order/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await inventoryCollection.deleteOne(query);
-            res.send(result);
-        });
+     
 
     }
     finally {
