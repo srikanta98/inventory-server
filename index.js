@@ -1,4 +1,4 @@
-//14 num porjonto firt step
+
 const express = require('express');
 
 const cors = require('cors');
@@ -132,9 +132,7 @@ app.get('/', (req, res) => {
     res.send('Running Genius Serveriiii');
 });
 
-// app.get('/hero', (req, res) =>{
-//     res.send('Hero meets hero ku')
-// })
+
 
 app.listen(port, () => {
     console.log('Listening to port', port);
