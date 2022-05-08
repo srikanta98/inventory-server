@@ -14,21 +14,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-function verifyJWT(req, res, next) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-        return res.status(401).send({ message: 'unauthorized access' });
-    }
-    const token = authHeader.split(' ')[1];
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(403).send({ message: 'Forbidden access' });
-        }
-        console.log('decoded', decoded);
-        req.decoded = decoded;
-        next();
-    })
-}
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.v9vbj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -75,19 +60,19 @@ async function run() {
             const result = await inventoryCollection.deleteOne(query);
             res.send(result);
         });
-        app.put('/inventory/:id', async(req, res) =>{
-            const inventoryId = req.params.id;
-            const updatedUser = req.body.newItemvalue.quantity;
-            const filter = {_id: ObjectId(inventoryId)};
-            const options = { upsert: true };
-            const updatedDoc = {
-                $set: {
-                   quantity: updatedUser
-                }
-            };
-        const result = await inventoryCollection.updateOne(filter, updatedDoc, options);
-        res.send(result);
-        });
+        // app.put('/inventory/:id', async(req, res) =>{
+        //     const inventoryId = req.params.id;
+        //     const updatedUser = req.body.newItemvalue.quantity;
+        //     const filter = {_id: ObjectId(inventoryId)};
+        //     const options = { upsert: true };
+        //     const updatedDoc = {
+        //         $set: {
+        //            quantity: updatedUser
+        //         }
+        //     };
+        // const result = await inventoryCollection.updateOne(filter, updatedDoc, options);
+        // res.send(result);
+        // });
 
         
         // Order Collection API
