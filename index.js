@@ -33,6 +33,13 @@ async function run() {
             });
             res.send({ accessToken });
         })
+        app.post('/login', async (req, res) => {
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '1d'
+            });
+            res.send({ accessToken });
+        })
 
         app.get('/inventory', async (req, res) => {
             const query = {};
@@ -76,9 +83,22 @@ async function run() {
 
         
         
-        
+        app.get('/order', verifyJWT, async (req, res) => {
+            const decodedEmail = req.decoded.email;
+            const email = req.query.email;
+            if (email === decodedEmail) {
+                const query = { email: email };
+                const cursor = orderCollection.find(query);
+                const orders = await cursor.toArray();
+                res.send(orders);
+            }
+            else{
+                res.status(403).send({message: 'forbidden access'})
+            }
+        })
 
-     
+
+     z
 
     }
     finally {
